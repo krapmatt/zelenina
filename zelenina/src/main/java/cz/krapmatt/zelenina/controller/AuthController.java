@@ -65,7 +65,7 @@ public class AuthController {
         return "login";
     }
 
-    /*@PostMapping("/login")
+    @PostMapping("/login")
     public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
         System.out.println("Login2");
         System.out.println("Email: " + email); // Check email value
@@ -79,7 +79,7 @@ public class AuthController {
             model.addAttribute("error", "Invalid email or password");
             return "login";
         }
-    }*/
+    }
     
     
 }
