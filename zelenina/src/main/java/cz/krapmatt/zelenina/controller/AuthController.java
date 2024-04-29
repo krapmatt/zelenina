@@ -81,5 +81,14 @@ public class AuthController {
         }
     }
     
+    @PostMapping("/login/guest")
+    public String loginAsAnonymous(Model model) {
+        System.out.println("Logging in as guest");
+        model.addAttribute("user", userService.newGuestUser());
+        
+        return "redirect:/index";
+    }
+    
+    
     
 }

@@ -32,6 +32,7 @@ public class SpringSecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/register/**").permitAll()
+                                .requestMatchers("/login/guest").permitAll()
                                 .requestMatchers("/index").permitAll()
                 ).formLogin(
                         form -> form
@@ -46,6 +47,7 @@ public class SpringSecurityConfig {
                                 .permitAll()
                 );
                 System.out.println("Filter end");
+            
         return http.build();
     }
 

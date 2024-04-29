@@ -73,7 +73,11 @@
                             <span> Not registered ?
                                 <a th:href="@{/register}">Register/Signup here</a>
                             </span>
+                            
                         </div>
+                    </form>
+                    <form method="post" th:action="@{/login/guest}">
+                        <button type="submit" th:href="@{/index}" class="btn btn-primary">Continue as anonymous</button>
                     </form>
                 </div>
             </div>

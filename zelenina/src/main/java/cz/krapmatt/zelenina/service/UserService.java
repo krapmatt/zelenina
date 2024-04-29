@@ -74,4 +74,10 @@ public class UserService implements UserDetailsService {
         return passwordEncoder.matches(password, user.getPassword());
     }
     
+    public User newGuestUser() {
+        User guest = new User();
+        guest.setUsername("guest");
+        userRepository.save(guest);
+        return guest;
+    }
 }
