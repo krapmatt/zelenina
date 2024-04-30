@@ -43,10 +43,7 @@
                     <h2 class="text-center">Login Form</h2>
                 </div>
                 <div class="card-body">
-                    <form
-                        method="post"
-                        th:action="@{/login}"
-                    >
+                    <form method="post" th:action="@{/login}">
                         <div class="form-group mb-3">
                             <label class="form-label"> Email</label>
                             <input
@@ -77,7 +74,7 @@
                         </div>
                     </form>
                     <form method="post" th:action="@{/login/guest}">
-                        <button type="submit" th:href="@{/index}" class="btn btn-primary">Continue as anonymous</button>
+                        <button type="submit" th:href="@{/voting}" class="btn btn-primary">Continue as anonymous</button>
                     </form>
                 </div>
             </div>

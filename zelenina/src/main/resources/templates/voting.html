@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fruit Voting</title>
+</head>
+<body>
+    <p>
+        Welcome <span th:text="${user}"></span>
+    </p>
+    <h1>Vote for Your Favorite Fruit</h1>
+    <div th:each="food: ${randomFood}">
+        <form th:action="@{/voting}" method="post">
+            <input type="hidden" name="chosenFood" th:value="${food.name}">
+            <h2 th:text="${food.name}"></h2>
+            <button type="submit" th:text="${food.name}">Vote for </button>
+        </form>
+    </div>
+</body>
+</html>

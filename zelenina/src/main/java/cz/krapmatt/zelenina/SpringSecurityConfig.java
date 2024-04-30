@@ -33,17 +33,20 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/login/guest").permitAll()
-                                .requestMatchers("/index").permitAll()
+                                .requestMatchers("/voting").hasRole("USER")
                 ).formLogin(
                         form -> form
                                 .loginPage("/login")
-                                .loginProcessingUrl("/index")
-                                .defaultSuccessUrl("/index")
+                                .usernameParameter("email")
+                                .loginProcessingUrl("/login")
+                                .defaultSuccessUrl("/voting")
+                                .failureUrl("/login?error=true")
                                 .permitAll()
 
                 ).logout(
                         logout -> logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                                .logoutSuccessUrl("/login?logout=true")
                                 .permitAll()
                 );
                 System.out.println("Filter end");
@@ -51,6 +54,8 @@ public class SpringSecurityConfig {
         return http.build();
     }
 
+    
+    
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());

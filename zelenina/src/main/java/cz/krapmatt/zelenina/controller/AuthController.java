@@ -1,7 +1,12 @@
 package cz.krapmatt.zelenina.controller;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,11 +14,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import cz.krapmatt.zelenina.entities.Role;
 import cz.krapmatt.zelenina.entities.User;
 import cz.krapmatt.zelenina.service.UserService;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -29,7 +34,7 @@ public class AuthController {
     public String home() {
         return "index";
     }
-
+    
     
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -54,7 +59,11 @@ public class AuthController {
             model.addAttribute("user", user);
             return "/register";
         }
-
+        List<Role> roles = new ArrayList<>();
+        Role role = new Role();
+        role.setName("USER");
+        roles.add(role);
+        user.setRoles(roles);
         userService.saveUser(user);
         return "redirect:/register?success";
     }
@@ -71,9 +80,9 @@ public class AuthController {
         System.out.println("Email: " + email); // Check email value
         System.out.println("Password: " + password);
         User user = userService.findUserByEmail(email);
-        //if (user != null && userService.verifyPass(user, password)) {
         if (user != null && userService.verifyPass(user, password)) {
-            return "redirect:/index";
+            model.addAttribute("user", user);
+            return "redirect:/voting";
         } else {
             
             model.addAttribute("error", "Invalid email or password");
@@ -84,9 +93,10 @@ public class AuthController {
     @PostMapping("/login/guest")
     public String loginAsAnonymous(Model model) {
         System.out.println("Logging in as guest");
-        model.addAttribute("user", userService.newGuestUser());
+        User user = userService.newGuestUser();
+        model.addAttribute("user", user);
         
-        return "redirect:/index";
+        return "redirect:/voting";
     }
     
     

@@ -7,32 +7,34 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "role")
-public class Role {
+@Table(name="food")
+public class Food {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     private String name;
-    
+
     
 
+    public Food(String name) {
+        this.name = name;
+    }
+
     /**
-     * @return Long return the id
+     * @return long return the id
      */
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
-
-    
-
 
     /**
      * @return String return the name
