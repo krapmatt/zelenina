@@ -16,10 +16,15 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-public class SpringSecurityConfig {
+public class SecurityConfig {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
@@ -38,7 +43,7 @@ public class SpringSecurityConfig {
                         form -> form
                                 .loginPage("/login")
                                 .usernameParameter("email")
-                                .loginProcessingUrl("/login")
+                                .passwordParameter("password")
                                 .defaultSuccessUrl("/voting")
                                 .failureUrl("/login?error=true")
                                 .permitAll()

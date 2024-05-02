@@ -35,12 +35,12 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
         if (user == null) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
+            throw new UsernameNotFoundException("User not found with username: " + email);
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthorities(user));
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthorities(user));
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(User user) {
@@ -58,7 +58,15 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    
+    public void createUser(User user) {
+        List<Role> roles = new ArrayList<>();
+        Role role = new Role();
+        role.setName("ROLE_USER");
+        roles.add(role);
+        user.setRoles(roles);
+        saveUser(user);    
+    }
+
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
@@ -77,9 +85,10 @@ public class UserService implements UserDetailsService {
     public User newGuestUser() {
         User guest = new User();
         guest.setUsername("guest");
+        guest.setEmail("guest");
         List<Role> roles = new ArrayList<>();
         Role role = new Role();
-        role.setName("USER");
+        role.setName("ROLE_USER");
         roles.add(role);
         guest.setRoles(roles);
         roleRepository.save(role);        

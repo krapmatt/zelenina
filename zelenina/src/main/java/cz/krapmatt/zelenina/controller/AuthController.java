@@ -59,12 +59,8 @@ public class AuthController {
             model.addAttribute("user", user);
             return "/register";
         }
-        List<Role> roles = new ArrayList<>();
-        Role role = new Role();
-        role.setName("USER");
-        roles.add(role);
-        user.setRoles(roles);
-        userService.saveUser(user);
+        
+        userService.createUser(user);
         return "redirect:/register?success";
     }
     
