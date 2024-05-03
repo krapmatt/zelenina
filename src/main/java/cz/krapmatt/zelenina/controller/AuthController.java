@@ -38,15 +38,14 @@ public class AuthController {
         return "register";
     }
 
-    @PostMapping("/register/save")
+    @PostMapping("/register")
     public String registration(@Validated @ModelAttribute("user") User user,
                                BindingResult result,
                                Model model){
         User existingUser = userService.findUserByEmail(user.getEmail());
 
         if(existingUser != null && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty()){
-            result.rejectValue("email", null,
-                    "There is already an account registered with the same email");
+            result.rejectValue("email", null, "There is already an account registered with the same email");
         }
 
         if(result.hasErrors()){
@@ -55,7 +54,7 @@ public class AuthController {
         }
         
         userService.createUser(user);
-        return "redirect:/register?success";
+        return "redirect:/login";
     }
     
     @GetMapping("/login")

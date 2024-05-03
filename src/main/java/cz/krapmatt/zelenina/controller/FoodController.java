@@ -42,8 +42,8 @@ public class FoodController {
     }
 
     @PostMapping("/voting")
-    public String saveVote(@RequestParam("chosenFood") String food ) {
-        //TODO: process POST request
+    public String saveVote(@RequestParam("chosenFood") String food) {
+        
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
 

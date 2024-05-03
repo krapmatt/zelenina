@@ -3,7 +3,6 @@ package cz.krapmatt.zelenina.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,14 +42,13 @@ public class FoodService {
             int randomIndex = random.nextInt(foods.size());
             selectedFood.add(foods.get(randomIndex));
         }
-
+        //V připadě předělání na více možností na hlasy předělat! TODO!
         if(selectedFood.get(0).getName() == selectedFood.get(1).getName()) {
             return selectRandomObjects(count);
         } else {
             return selectedFood;
         }
 
-        
     }
     
     @Transactional

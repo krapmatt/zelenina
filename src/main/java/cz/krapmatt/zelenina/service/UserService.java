@@ -43,6 +43,11 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthorities(user));
     }
 
+    //Každému dát natvrdo, roli neukládat do databaze
+    //Ukládat obě jídla, které vyhrálo/prohrálo
+    //Přístupy problem odstranit /register/save
+    //Správně načítat věci z databáze
+
     private Collection<? extends GrantedAuthority> getAuthorities(User user) {
         List<GrantedAuthority> authorities = new ArrayList<>();
         // Example: Fetching user roles and converting them to GrantedAuthority
@@ -72,10 +77,10 @@ public class UserService implements UserDetailsService {
     }
 
     
-    public List<User> findAllUsers() {
+    /*public List<User> findAllUsers() {
         List<User> users = userRepository.findAll();
         return users;
-    }
+    }*/
 
     public boolean verifyPass(User user, String password) {
         return passwordEncoder.matches(password, user.getPassword());
