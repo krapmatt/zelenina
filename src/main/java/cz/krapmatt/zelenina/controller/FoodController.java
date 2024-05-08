@@ -2,7 +2,8 @@ package cz.krapmatt.zelenina.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -19,10 +20,11 @@ import cz.krapmatt.zelenina.service.UserService;
 
 @Controller
 public class FoodController {
-    @Autowired
+    
     private FoodService foodService;
-    @Autowired
+    
     private UserService userService;
+
     public FoodController(FoodService foodService, UserService userService) {
         this.foodService = foodService;
         this.userService = userService;
@@ -30,27 +32,32 @@ public class FoodController {
 
     @GetMapping("/voting")
     public String pickRandomFood(Model model) {
-        List<Food> randomFood = foodService.selectRandomObjects(2);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        model.addAttribute("user", auth.getDetails());
-        System.out.println(randomFood);
-        model.addAttribute("randomFood", randomFood);
-        model.addAttribute("food1", randomFood.get(0).getName());
-        model.addAttribute("food2", randomFood.get(1).getName());
-        return "voting";
-    }
-
-    @PostMapping("/voting")
-    public String saveVote(@RequestParam("chosenFood") String food) {
+        List<Food> randomFood = foodService.selectRandomFoods();
         
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
 
         User user = userService.findUserByEmail(email);
-        foodService.saveVote(user, food);
 
-        System.out.println("ahoj" + food);
+        model.addAttribute("user", user);
+        
+        model.addAttribute("randomFood", randomFood);
+        model.addAttribute("food1", randomFood.get(0).getName());
+        model.addAttribute("food2", randomFood.get(1).getName());
+
+        return "voting";
+    }
+
+    @PostMapping("/voting")
+    public String saveVote(@RequestParam("chosenFood") String chosenFood, @RequestParam("loseFood") String loseFood) {
+        
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        
+        User user = userService.findUserByEmail(email);
+        
+        foodService.saveVote(user, chosenFood, loseFood);
+
         return "redirect:/voting";
     }
     

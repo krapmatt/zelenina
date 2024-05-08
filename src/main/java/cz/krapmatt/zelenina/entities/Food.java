@@ -1,9 +1,11 @@
 package cz.krapmatt.zelenina.entities;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,13 +20,18 @@ public class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     
+    @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
+    private LocalDateTime timeOfAddition;
+
+    @OneToMany(mappedBy = "chosenFood", cascade = CascadeType.ALL)
     private List<Vote> votes = new ArrayList<>();
 
+    public Food() {
+
+    }
     
     public Food(String name) {
         this.name = name;
@@ -71,6 +78,22 @@ public class Food {
      */
     public void setVotes(List<Vote> votes) {
         this.votes = votes;
+    }
+
+
+
+    /**
+     * @return LocalDateTime return the timeOfAddition
+     */
+    public LocalDateTime getTimeOfAddition() {
+        return timeOfAddition;
+    }
+
+    /**
+     * @param timeOfAddition the timeOfAddition to set
+     */
+    public void setTimeOfAddition(LocalDateTime timeOfAddition) {
+        this.timeOfAddition = timeOfAddition;
     }
 
 }

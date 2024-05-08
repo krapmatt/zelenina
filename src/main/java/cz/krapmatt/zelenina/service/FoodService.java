@@ -1,5 +1,6 @@
 package cz.krapmatt.zelenina.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +14,7 @@ import cz.krapmatt.zelenina.entities.User;
 import cz.krapmatt.zelenina.entities.Vote;
 import cz.krapmatt.zelenina.repository.FoodRepository;
 import cz.krapmatt.zelenina.repository.VoteRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 @Service
 public class FoodService {
@@ -26,35 +28,39 @@ public class FoodService {
         this.voteRepository = voteRepository;
     }
     
-    public List<Food> selectRandomObjects(int count) {
-        
+    @PostConstruct
+    public void initializeFoods() {
         List<Food> foods = Arrays.asList(
             new Food("Banan"),
             new Food("Jablko"),
             new Food("Pomeranč"),
             new Food("Myš")
         );
-
-        
-        List<Food> selectedFood = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < count; i++) {
-            int randomIndex = random.nextInt(foods.size());
-            selectedFood.add(foods.get(randomIndex));
+        for (Food food : foods) {
+            if (!foodRepository.existsByName(food.getName())) {
+                food.setTimeOfAddition(LocalDateTime.now());
+                foodRepository.save(food);
+            } 
         }
-        //V připadě předělání na více možností na hlasy předělat! TODO!
-        if(selectedFood.get(0).getName() == selectedFood.get(1).getName()) {
-            return selectRandomObjects(count);
-        } else {
-            return selectedFood;
-        }
-
     }
-    
+
+    public List<Food> selectRandomFoods() {
+        return foodRepository.findRandomTwo();
+    }
+
     @Transactional
-    public void saveVote(User user, String food) {
-        
-        Vote vote = new Vote(user, new Food(food));
-        voteRepository.save(vote);
+    public void saveVote(User user, String chosenFood, String loseFood) {
+    Food existingFood = foodRepository.findByName(chosenFood);
+
+    if (existingFood == null) {
+        //přidat pole pro přidání svého jídla
+        Food newFood = new Food(chosenFood);
+        foodRepository.save(newFood);
+        existingFood = newFood;
     }
+
+    Vote vote = new Vote(user, existingFood, foodRepository.findByName(loseFood));
+    vote.setTimeOfVote(LocalDateTime.now());
+    voteRepository.save(vote);
+}
 }

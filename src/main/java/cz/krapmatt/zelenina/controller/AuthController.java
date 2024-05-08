@@ -2,6 +2,9 @@ package cz.krapmatt.zelenina.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,7 +35,6 @@ public class AuthController {
     
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        // create model object to store form data
         User user = new User();
         model.addAttribute("user", user);
         return "register";
@@ -53,21 +55,17 @@ public class AuthController {
             return "/register";
         }
         
-        userService.createUser(user);
+        userService.saveUser(user);
         return "redirect:/login";
     }
     
     @GetMapping("/login")
     public String showLoginForm() {
-        System.out.println("showLoginForm");
         return "login";
     }
 
     @PostMapping("/login")
     public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
-        System.out.println("Login2");
-        System.out.println("Email: " + email); // Check email value
-        System.out.println("Password: " + password);
         User user = userService.findUserByEmail(email);
         if (user != null && userService.verifyPass(user, password)) {
             model.addAttribute("user", user);
@@ -79,14 +77,7 @@ public class AuthController {
         }
     }
     
-    @PostMapping("/login/guest")
-    public String loginAsAnonymous(Model model) {
-        System.out.println("Logging in as guest");
-        User user = userService.newGuestUser();
-        model.addAttribute("user", user);
-        
-        return "redirect:/voting";
-    }
+    
     
     
     

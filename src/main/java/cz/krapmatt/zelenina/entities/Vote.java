@@ -2,6 +2,8 @@ package cz.krapmatt.zelenina.entities;
 
 
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,12 +24,19 @@ public class Vote {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "food_id")
-    private Food food;
+    private LocalDateTime timeOfVote;
 
-    public Vote(User user, Food food) {
-        this.food = food;
+    @ManyToOne
+    @JoinColumn(name = "chosen_food_id") 
+    private Food chosenFood;
+    
+    @ManyToOne
+    @JoinColumn(name = "lost_food_id")
+    private Food lostFood;
+
+    public Vote(User user, Food chosenFood, Food lostFood) {
+        this.chosenFood = chosenFood;
+        this.lostFood = lostFood;
         this.user = user;
     }
 
@@ -60,17 +69,46 @@ public class Vote {
     }
 
     /**
-     * @return Food return the food
+     * @return Food return the chosenFood
      */
-    public Food getFood() {
-        return food;
+    public Food getChosenFood() {
+        return chosenFood;
     }
 
     /**
-     * @param food the food to set
+     * @param chosenFood the chosenFood to set
      */
-    public void setFood(Food food) {
-        this.food = food;
+    public void setChosenFood(Food chosenFood) {
+        this.chosenFood = chosenFood;
+    }
+
+    /**
+     * @return Food return the lostFood
+     */
+    public Food getLostFood() {
+        return lostFood;
+    }
+
+    /**
+     * @param lostFood the lostFood to set
+     */
+    public void setLostFood(Food lostFood) {
+        this.lostFood = lostFood;
+    }
+
+
+    /**
+     * @return LocalDateTime return the timeOfVote
+     */
+    public LocalDateTime getTimeOfVote() {
+        return timeOfVote;
+    }
+
+    /**
+     * @param timeOfVote the timeOfVote to set
+     */
+    public void setTimeOfVote(LocalDateTime timeOfVote) {
+        this.timeOfVote = timeOfVote;
     }
 
 }
