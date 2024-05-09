@@ -2,9 +2,6 @@ package cz.krapmatt.zelenina.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -41,9 +38,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String registration(@Validated @ModelAttribute("user") User user,
-                               BindingResult result,
-                               Model model){
+    public String registration(@Validated @ModelAttribute("user") User user, BindingResult result, Model model) {
         User existingUser = userService.findUserByEmail(user.getEmail());
 
         if(existingUser != null && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty()){
@@ -71,14 +66,9 @@ public class AuthController {
             model.addAttribute("user", user);
             return "redirect:/voting";
         } else {
-            
             model.addAttribute("error", "Invalid email or password");
             return "login";
         }
     }
-    
-    
-    
-    
-    
+
 }

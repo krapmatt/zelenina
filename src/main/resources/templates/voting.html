@@ -4,21 +4,29 @@
     <meta charset="UTF-8">
     <title>Fruit Voting</title>
 </head>
-<body>
-    <p>
-        Welcome <span th:text="${user}"></span>
-    </p>
-    <div th:if="${param.logout}">
-        <div class="alert alert-success"> You have been logged out.</div>
-    </div>
-    <h1>Vote for Your Favorite Fruit</h1>
-    <div th:each="food, iterStat: ${randomFood}">
-        <form th:action="@{/voting}" method="post">
-            <input type="hidden" name="chosenFood" th:value="${food.name}">
-            <input type="hidden" name="loseFood" th:value="${iterStat.index == 0 ? randomFood[1].name : randomFood[0].name}">
-            <h2 th:text="${food.name}"></h2>
-            <button type="submit" th:text="${food.name}">Vote for </button>
-        </form>
-    </div>
-</body>
+    <body>
+        <p>
+            Welcome <span th:text="${user}"></span>
+        </p>
+        <div th:if="${param.logout}">
+            <div class="alert alert-success"> You have been logged out.</div>
+        </div>
+        <h1>Vote for Your Favorite Fruit</h1>
+        <div th:each="food, iterStat: ${randomFood}">
+            <form th:action="@{/voting}" method="post">
+                <input type="hidden" name="winnerFood" th:value="${food.name}">
+                <input type="hidden" name="loserFood" th:value="${iterStat.index == 0 ? randomFood[1].name : randomFood[0].name}">
+                <h2 th:text="${food.name}"></h2>
+                <button type="submit" th:text="${food.name}">Vote for </button>
+            </form>
+        </div>
+        <div>
+            <h2>Add Your Own Food:</h2>
+            <form th:action="@{/voting}" method="post">
+                <input type="text" name="winnerFood" placeholder="Enter your own food">
+                <input type="hidden" name="loserFood" value="">
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </body>
 </html>

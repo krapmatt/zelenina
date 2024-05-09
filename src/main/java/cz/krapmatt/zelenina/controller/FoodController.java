@@ -2,8 +2,6 @@ package cz.krapmatt.zelenina.controller;
 
 import java.util.List;
 
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -39,24 +37,24 @@ public class FoodController {
 
         User user = userService.findUserByEmail(email);
 
-        model.addAttribute("user", user);
+        model.addAttribute("user", user.getUsername());
         
         model.addAttribute("randomFood", randomFood);
-        model.addAttribute("food1", randomFood.get(0).getName());
-        model.addAttribute("food2", randomFood.get(1).getName());
+        /*model.addAttribute("food1", randomFood.get(0).getName());
+        model.addAttribute("food2", randomFood.get(1).getName());*/
 
         return "voting";
     }
 
     @PostMapping("/voting")
-    public String saveVote(@RequestParam("chosenFood") String chosenFood, @RequestParam("loseFood") String loseFood) {
+    public String saveVote(@RequestParam("winnerFood") String winnerFood, @RequestParam("loserFood") String loserFood) {
         
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         
         User user = userService.findUserByEmail(email);
         
-        foodService.saveVote(user, chosenFood, loseFood);
+        foodService.saveVote(user, winnerFood, loserFood);
 
         return "redirect:/voting";
     }

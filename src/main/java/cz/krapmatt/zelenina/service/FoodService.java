@@ -1,12 +1,9 @@
 package cz.krapmatt.zelenina.service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cz.krapmatt.zelenina.entities.Food;
@@ -19,10 +16,11 @@ import jakarta.transaction.Transactional;
 @Service
 public class FoodService {
     
-    @Autowired
+    
     private FoodRepository foodRepository;
-    @Autowired
+    
     private VoteRepository voteRepository;
+
     public FoodService(FoodRepository foodRepository, VoteRepository voteRepository) {
         this.foodRepository = foodRepository;
         this.voteRepository = voteRepository;
@@ -38,7 +36,6 @@ public class FoodService {
         );
         for (Food food : foods) {
             if (!foodRepository.existsByName(food.getName())) {
-                food.setTimeOfAddition(LocalDateTime.now());
                 foodRepository.save(food);
             } 
         }
@@ -48,19 +45,21 @@ public class FoodService {
         return foodRepository.findRandomTwo();
     }
 
+    
+
     @Transactional
-    public void saveVote(User user, String chosenFood, String loseFood) {
-    Food existingFood = foodRepository.findByName(chosenFood);
+    public void saveVote(User user, String winnerFood, String loserFood) {
+        Food existingFood = foodRepository.findByName(winnerFood);
 
-    if (existingFood == null) {
-        //přidat pole pro přidání svého jídla
-        Food newFood = new Food(chosenFood);
-        foodRepository.save(newFood);
-        existingFood = newFood;
+        if (existingFood == null) {
+            //přidat pole pro přidání svého jídla
+            Food newFood = new Food(winnerFood);
+            foodRepository.save(newFood);
+            existingFood = newFood;
+        }
+
+        Vote vote = new Vote(user, existingFood, foodRepository.findByName(loserFood));
+        vote.setTimeOfVote(LocalDateTime.now());
+        voteRepository.save(vote);
     }
-
-    Vote vote = new Vote(user, existingFood, foodRepository.findByName(loseFood));
-    vote.setTimeOfVote(LocalDateTime.now());
-    voteRepository.save(vote);
-}
 }

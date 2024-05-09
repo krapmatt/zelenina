@@ -1,17 +1,14 @@
 package cz.krapmatt.zelenina.service;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Service;
 
 import cz.krapmatt.zelenina.entities.User;
@@ -42,14 +39,8 @@ public class UserService implements UserDetailsService {
         
     }
 
-
-    //Správně načítat věci z databáze
-
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        return authorities;
+        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
     }
     
     @Transactional
