@@ -2,7 +2,9 @@ package cz.krapmatt.zelenina.entities;
 
 
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,7 +25,8 @@ public class Vote {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private LocalDateTime timeOfVote;
+    @CreationTimestamp
+    private Timestamp timeOfVote;
 
     @ManyToOne
     @JoinColumn(name = "chosen_food_id") 
@@ -95,19 +98,5 @@ public class Vote {
         this.lostFood = lostFood;
     }
 
-
-    /**
-     * @return LocalDateTime return the timeOfVote
-     */
-    public LocalDateTime getTimeOfVote() {
-        return timeOfVote;
-    }
-
-    /**
-     * @param timeOfVote the timeOfVote to set
-     */
-    public void setTimeOfVote(LocalDateTime timeOfVote) {
-        this.timeOfVote = timeOfVote;
-    }
 
 }

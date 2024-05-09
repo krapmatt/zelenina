@@ -59,7 +59,7 @@ public class FoodService {
         }
 
         Vote vote = new Vote(user, existingFood, foodRepository.findByName(loserFood));
-        vote.setTimeOfVote(LocalDateTime.now());
+
         voteRepository.save(vote);
     }
 }

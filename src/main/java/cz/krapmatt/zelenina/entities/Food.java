@@ -1,8 +1,10 @@
 package cz.krapmatt.zelenina.entities;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -24,7 +26,8 @@ public class Food {
     @Column(unique = true)
     private String name;
 
-    private LocalDateTime timeOfAddition;
+    @CreationTimestamp
+    private Timestamp timeOfAddition;
 
     @OneToMany(mappedBy = "chosenFood", cascade = CascadeType.ALL)
     private List<Vote> votes = new ArrayList<>();
@@ -35,7 +38,6 @@ public class Food {
     
     public Food(String name) {
         this.name = name;
-        this.timeOfAddition = LocalDateTime.now();
     }
 
     /**
@@ -80,20 +82,18 @@ public class Food {
     public void setVotes(List<Vote> votes) {
         this.votes = votes;
     }
-
-
-
+    
     /**
-     * @return LocalDateTime return the timeOfAddition
+     * @return Timestamp return the timeOfAddition
      */
-    public LocalDateTime getTimeOfAddition() {
+    public Timestamp getTimeOfAddition() {
         return timeOfAddition;
     }
 
     /**
      * @param timeOfAddition the timeOfAddition to set
      */
-    public void setTimeOfAddition(LocalDateTime timeOfAddition) {
+    public void setTimeOfAddition(Timestamp timeOfAddition) {
         this.timeOfAddition = timeOfAddition;
     }
 
